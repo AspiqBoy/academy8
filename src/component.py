@@ -59,8 +59,8 @@ class Component(KBCEnvHandler):
         '''
         DATA_FOLDER = self.data_path
 
-SOURCE_FILE_PATH = os.path.join(self.tables_in_path;'input.csv')
-RESULT_FILE_PATH = os.path.join(self.tables_out_path;'output.csv')
+SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
+RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
 
 config = self.cfg_params
 PARAM_PRINT_LINES = config['print_rows']
