@@ -66,7 +66,23 @@ class Component(KBCEnvHandler):
         # get output table path
         result_file_path = os.path.join(self.tables_out_path, "output.csv")
         logging.info(f"Result file path: {result_file_path}")
-
+ 
+        print('Running...')
+        with open(source_file_path, 'r') as input, open(result_file_path, 'w+', newline='') as out:
+            reader = csv.DictReader(input)
+            new_columns = reader.fieldnames
+            # append row number col
+            new_columns.append('row_number')
+            writer = csv.DictWriter(out, fieldnames=new_columns, lineterminator='\n', delimiter=',')
+            writer.writeheader()
+            for index, l in enumerate(reader):
+                # print line
+                if params:
+                    print(f'Printing line {index}: {l}')
+                # add row number
+                l['row_number'] = index
+                writer.writerow(l)        
+        
         self.configuration.write_table_manifest(
             file_name=result_file_path,
             primary_key=["row_number"],
