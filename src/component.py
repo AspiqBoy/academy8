@@ -59,7 +59,7 @@ class Component(KBCEnvHandler):
 
  
         print('Running...')
-        with open(self.get_input_tables_definitions()[0].full_path, 'r') as input, open(os.path.join(self.tables_out_path, "output.csv"), 'w+', newline='') as out:
+        with open(os.path.join(self.tables_in_path;'input.csv'), 'r') as input, open(os.path.join(self.tables_out_path, "output.csv"), 'w+', newline='') as out:
             reader = csv.DictReader(input)
             new_columns = reader.fieldnames
             # append row number col
