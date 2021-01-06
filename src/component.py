@@ -56,7 +56,6 @@ class Component(KBCEnvHandler):
         # get config params
         params = self.cfg_params
         logging.info(f"params: {params}")
-
  
         print('Running...')
         with open(os.path.join(self.tables_in_path,'input.csv'), 'r') as input, open(os.path.join(self.tables_out_path, "output.csv"), 'w+', newline='') as out:
