@@ -59,30 +59,27 @@ class Component(KBCEnvHandler):
         '''
         DATA_FOLDER = self.data_path
 
-SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
-RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
+        SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
+        RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
 
-config = self.cfg_params
-PARAM_PRINT_LINES = config['print_rows']
+        config = self.cfg_params
+        PARAM_PRINT_LINES = config['print_rows']
 
-print('Running...')
-with open(SOURCE_FILE_PATH, 'r') as input, open(RESULT_FILE_PATH, 'w+', newline='') as out:
-    reader = csv.DictReader(input)
-    new_columns = reader.fieldnames
-    # append row number col
-    new_columns.append('row_number')
-    writer = csv.DictWriter(out, fieldnames=new_columns, lineterminator='\n', delimiter=',')
-    writer.writeheader()
-    for index, l in enumerate(reader):
-        # print line
-        if PARAM_PRINT_LINES:
-            print(f'Printing line {index}: {l}')
-        # add row number
-        l['row_number'] = index
-        writer.writerow(l)
-
-
-
+        print('Running...')
+        with open(SOURCE_FILE_PATH, 'r') as input, open(RESULT_FILE_PATH, 'w+', newline='') as out:
+            reader = csv.DictReader(input)
+            new_columns = reader.fieldnames
+            # append row number col
+            new_columns.append('row_number')
+            writer = csv.DictWriter(out, fieldnames=new_columns, lineterminator='\n', delimiter=',')
+            writer.writeheader()
+            for index, l in enumerate(reader):
+                # print line
+                if PARAM_PRINT_LINES:
+                    print(f'Printing line {index}: {l}')
+                # add row number
+                l['row_number'] = index
+                writer.writerow(l)
 """
         Main entrypoint
 """
