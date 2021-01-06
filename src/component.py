@@ -47,19 +47,22 @@ class Component(KBCEnvHandler):
             self.validate_image_parameters(MANDATORY_IMAGE_PARS)
         except ValueError as e:
             logging.exception(e)
+            
+            DATA_FOLDER = self.data_path
+
+            SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
+            RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
+
+            config = self.cfg_params
+            PARAM_PRINT_LINES = config['print_rows']
+            
             exit(1)
 
     def run(self):
         '''
         Main execution code
         '''
-        DATA_FOLDER = self.data_path
 
-        SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
-        RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
-
-        config = self.cfg_params
-        PARAM_PRINT_LINES = config['print_rows']
 
         print('Running...')
         with open(SOURCE_FILE_PATH, 'r') as input, open(RESULT_FILE_PATH, 'w+', newline='') as out:
