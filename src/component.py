@@ -28,15 +28,6 @@ class Component(KBCEnvHandler):
 
     def __init__(self, debug=False):
         # for easier local project setup
-                    
-         DATA_FOLDER = self.data_path
-
-         SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
-         RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
-
-         config = self.cfg_params
-         PARAM_PRINT_LINES = config['print_rows']
-              
         default_data_dir = Path(__file__).resolve().parent.parent.joinpath('data').as_posix() \
             if not os.environ.get('KBC_DATADIR') else None
 
@@ -59,29 +50,36 @@ class Component(KBCEnvHandler):
             exit(1)
 
     def run(self):
-        '''
-        Main execution code
-        '''
+
+        # get config params
+        params = self.cfg_params
+        logging.info(f"params: {params}")
+
+        # get input table path
+        input_table_defs = self.get_input_tables_definitions()
+        first_table = input_table_defs[0]
+        source_file_path = first_table.full_path
+        logging.info(f"Source file path: {source_file_path}")
+
+        # get output table path
+        result_file_path = os.path.join(self.tables_out_path, "output.csv")
+        logging.info(f"Result file path: {result_file_path}")
+
+        self.configuration.write_table_manifest(
+            file_name=result_file_path,
+            primary_key=["row_number"],
+            incremental=True,
+        )
+
+        # get state file and print last update
+        state = self.get_state_file()
+        logging.info(f"Last update: {state.get('last_update')}")
+
+        # store new state
+        now = datetime.datetime.now()
+        self.write_state_file({"last_update": now.strftime("%d/%m/%Y %H:%M:%S")})
 
 
-        print('Running...')
-        with open(SOURCE_FILE_PATH, 'r') as input, open(RESULT_FILE_PATH, 'w+', newline='') as out:
-            reader = csv.DictReader(input)
-            new_columns = reader.fieldnames
-            # append row number col
-            new_columns.append('row_number')
-            writer = csv.DictWriter(out, fieldnames=new_columns, lineterminator='\n', delimiter=',')
-            writer.writeheader()
-            for index, l in enumerate(reader):
-                # print line
-                if PARAM_PRINT_LINES:
-                    print(f'Printing line {index}: {l}')
-                # add row number
-                l['row_number'] = index
-                writer.writerow(l)
-"""
-        Main entrypoint
-"""
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         debug_arg = sys.argv[1]
