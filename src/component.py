@@ -6,6 +6,7 @@ Template Component main class.
 import logging
 import os
 import sys
+import datetime
 from pathlib import Path
 
 from kbc.env_handler import KBCEnvHandler
