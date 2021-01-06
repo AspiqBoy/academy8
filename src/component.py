@@ -28,6 +28,15 @@ class Component(KBCEnvHandler):
 
     def __init__(self, debug=False):
         # for easier local project setup
+                    
+         DATA_FOLDER = self.data_path
+
+         SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
+         RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
+
+         config = self.cfg_params
+         PARAM_PRINT_LINES = config['print_rows']
+              
         default_data_dir = Path(__file__).resolve().parent.parent.joinpath('data').as_posix() \
             if not os.environ.get('KBC_DATADIR') else None
 
@@ -47,15 +56,6 @@ class Component(KBCEnvHandler):
             self.validate_image_parameters(MANDATORY_IMAGE_PARS)
         except ValueError as e:
             logging.exception(e)
-            
-            DATA_FOLDER = self.data_path
-
-            SOURCE_FILE_PATH = os.path.join(self.tables_in_path,'input.csv')
-            RESULT_FILE_PATH = os.path.join(self.tables_out_path,'output.csv')
-
-            config = self.cfg_params
-            PARAM_PRINT_LINES = config['print_rows']
-            
             exit(1)
 
     def run(self):
