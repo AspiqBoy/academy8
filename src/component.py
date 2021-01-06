@@ -57,18 +57,9 @@ class Component(KBCEnvHandler):
         params = self.cfg_params
         logging.info(f"params: {params}")
 
-        # get input table path
-        input_table_defs = self.get_input_tables_definitions()
-        first_table = input_table_defs[0]
-        source_file_path = first_table.full_path
-        logging.info(f"Source file path: {source_file_path}")
-
-        # get output table path
-        result_file_path = os.path.join(self.tables_out_path, "output.csv")
-        logging.info(f"Result file path: {result_file_path}")
  
         print('Running...')
-        with open(source_file_path, 'r') as input, open(result_file_path, 'w+', newline='') as out:
+        with open(self.get_input_tables_definitions()[0].full_path, 'r') as input, open(os.path.join(self.tables_out_path, "output.csv"), 'w+', newline='') as out:
             reader = csv.DictReader(input)
             new_columns = reader.fieldnames
             # append row number col
@@ -84,7 +75,7 @@ class Component(KBCEnvHandler):
                 writer.writerow(l)        
         
         self.configuration.write_table_manifest(
-            file_name=result_file_path,
+            file_name=os.path.join(self.tables_out_path, "output.csv"),
             primary_key=["row_number"],
             incremental=True,
         )
